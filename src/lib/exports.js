@@ -1,6 +1,3 @@
-const axios = require("axios");
-const { CloudTasksClient } = require("@google-cloud/tasks");
-
 const PAGE_SIZE = 20;
 
 function getOTP() {

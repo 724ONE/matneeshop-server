@@ -10,8 +10,14 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      unique: true, // Make the username field unique
+      unique: true,
     },
+    forgotOtp: {
+      type: String,
+    },
+    resetToken: String,
+    tokenExpires: Date,
+
     phone: {
       type: String,
     },
@@ -22,7 +28,7 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
   },
-  { collection: "admins", strict: false, timestamps: true }
+  { collection: "users", strict: false, timestamps: true }
 );
 
 const User = mongoose.model("Users", userSchema);

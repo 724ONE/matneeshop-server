@@ -10,10 +10,6 @@ const filterOnCategory = async (req, res) => {
       (cat) => cat?.name?.toLowerCase() === categoryName?.toLowerCase()
     );
 
-    // if (!category) {
-    //   return res.status(404).json({ message: "Category not found" });
-    // }
-
     const response = await api.get("products", {
       category: category?.id,
       per_page: 100,

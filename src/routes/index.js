@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const express = require("express"); // Ensure express is required for instanceof checks
 const productRoutes = require("./productRoutes");
+const authRoutes = require("./authRoutes");
 
 exports.loadAppRoutes = (app) => {
   const registeredRoutes = []; // Store all routes for logging
@@ -30,6 +31,7 @@ exports.loadAppRoutes = (app) => {
   };
 
   loadRoutes("v1", productRoutes);
+  loadRoutes("v1", authRoutes);
 
   console.log("\nRegistered Routes:");
   registeredRoutes.forEach((route) => console.log(route));
