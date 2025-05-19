@@ -1,6 +1,6 @@
 # remove line 2 "service" whenever pushing for production mode
 # service: development
-runtime: nodejs18
+runtime: nodejs20
 env: standard
 instance_class: F4_1G
 env_variables:
