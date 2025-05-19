@@ -4,10 +4,11 @@ runtime: nodejs18
 env: standard
 instance_class: F4_1G
 env_variables:
-  DB_URL: mongodb+srv://admin:obxHIrvo9DfU7Yix@cluster0.6el2dvk.mongodb.net/privont_sandbox?retryWrites=true&w=majority
-  SEC_KEY: p801ri35792d4v6c01t5bi9o2n53210t6a78c998c7e6d5f49e0d5f9b12f3e4f
-  JWT_SECRET: p%0ri92v!0^ant#Y
-  SMS_ACCOUNT_ID: 22965
-  SMS_API_KEY: 31d76133b0584834844430f62b0438aa
-  SMS_SECRET_KEY: w*3J=9GabY-5
-  SMS_LCPN: +15122733882
+  URL_WOOCOMMERCE : https://demo.matineeshop.com
+  CONSUMER_SECRET : cs_45c698fe6f2fd50ef9ab04c2967568b4622f6179
+  CONSUMER_KEY : ck_9bd2c9227ec0a8efcea7815253203e52ce57e1d9
+  JWT_SECRET : thisiisiisuosjo
+  DB_HOST: localhost
+  DB_USER : demo_matinee
+  DB_PASSWORD : Y/BkZC2pH2!.2Okb
+  DB_NAME : demo_matinee
