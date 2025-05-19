@@ -16,26 +16,25 @@ const signUp = async (req, res) => {
       .promise()
       .query("SELECT * FROM users WHERE email = ?", [email]);
 
-    let user = users[0];
-
-    if (!user) {
-      const username = email.split("@")[0];
-
-      await db
-        .promise()
-        .query("INSERT INTO users (email, firstName) VALUES (?, ?)", [
-          email,
-          username,
-        ]);
-
-      const [newUsers] = await db
-        .promise()
-        .query("SELECT * FROM users WHERE email = ?", [email]);
-
-      user = newUsers[0];
+    if (users.length > 0) {
+      return res.status(409).json({ message: "Email already exists." });
     }
 
-    // Generate token and expiration
+    const username = email.split("@")[0];
+
+    await db
+      .promise()
+      .query("INSERT INTO users (email, firstName) VALUES (?, ?)", [
+        email,
+        username,
+      ]);
+
+    const [newUsers] = await db
+      .promise()
+      .query("SELECT * FROM users WHERE email = ?", [email]);
+
+    const user = newUsers[0];
+
     const token = crypto.randomBytes(32).toString("hex");
     const tokenExpires = new Date(Date.now() + 3600000); // 1 hour
 
