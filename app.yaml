@@ -1,14 +1,4 @@
-# remove line 2 "service" whenever pushing for production mode
-# service: development
 runtime: nodejs20
 env: standard
-instance_class: F4_1G
+instance_class: F1
 env_variables:
-  URL_WOOCOMMERCE : https://demo.matineeshop.com
-  CONSUMER_SECRET : cs_45c698fe6f2fd50ef9ab04c2967568b4622f6179
-  CONSUMER_KEY : ck_9bd2c9227ec0a8efcea7815253203e52ce57e1d9
-  JWT_SECRET : thisiisiisuosjo
-  DB_HOST: localhost
-  DB_USER : demo_matinee
-  DB_PASSWORD : Y/BkZC2pH2!.2Okb
-  DB_NAME : demo_matinee
