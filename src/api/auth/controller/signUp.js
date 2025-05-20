@@ -11,6 +11,16 @@ const signUp = async (req, res) => {
     if (!email) {
       return res.status(400).json({ message: "Email is required" });
     }
+    await db.promise().query(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    firstName VARCHAR(255),
+    resetToken VARCHAR(255),
+    tokenExpires DATETIME,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+`);
 
     const [users] = await db
       .promise()
