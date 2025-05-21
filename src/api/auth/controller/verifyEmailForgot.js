@@ -59,7 +59,10 @@ const verifyEmailForgot = async (req, res) => {
 
     res.json({
       success: true,
+    });
+    res.status(200).json({
       message: "Password reset instructions sent successfully.",
+      token: token,
     });
   } catch (error) {
     const message = error.message || "We are working to fix this problem";

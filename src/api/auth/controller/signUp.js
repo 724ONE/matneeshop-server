@@ -78,6 +78,8 @@ const signUp = async (req, res) => {
 
     res.status(200).json({
       message: "Signup successful. Check your email to set your password.",
+      token: token,
+      tokenExpires: tokenExpires,
     });
   } catch (error) {
     console.error("Signup error:", error);
