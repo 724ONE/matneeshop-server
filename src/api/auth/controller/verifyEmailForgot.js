@@ -57,9 +57,6 @@ const verifyEmailForgot = async (req, res) => {
 
     await transporter.sendMail(mailOptions);
 
-    res.json({
-      success: true,
-    });
     res.status(200).json({
       message: "Password reset instructions sent successfully.",
       token: token,
