@@ -44,7 +44,9 @@ const signUp = async (req, res) => {
         [email, username, hashedPassword, resetToken]
       );
 
-    res.status(200).json({ message: "Signup successful.", token: resetToken });
+    res
+      .status(200)
+      .json({ message: "Signup successful.", token: resetToken, email });
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ message: "Signup failed" });
