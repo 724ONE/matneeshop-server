@@ -35,7 +35,7 @@ const verifyEmailForgot = async (req, res) => {
       .query("UPDATE users SET otp = ? WHERE id = ?", [otp, user.id]);
 
     await transporter.sendMail({
-      from: '"Your App Name" <no-reply@yourdomain.com>',
+      from: '"Your App Name" farihakausar18@gmail.com',
       to: email,
       subject: "Your OTP Code for Password Reset",
       html: `
