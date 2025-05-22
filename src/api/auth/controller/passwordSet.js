@@ -1,11 +1,12 @@
 const bcrypt = require("bcrypt");
 const { initializeDatabase } = require("../../../database/db");
+
 const passwordSet = async (req, res) => {
   try {
     const db = initializeDatabase();
-    const { token, password, confirmPassword } = req.body;
+    const { email, password, confirmPassword } = req.body;
 
-    if (!token || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword) {
       return res.status(400).json({
         success: false,
         message: "All fields are required.",
@@ -21,34 +22,29 @@ const passwordSet = async (req, res) => {
 
     const [rows] = await db
       .promise()
-      .query(
-        "SELECT * FROM users WHERE resetToken = ? AND tokenExpires > NOW()",
-        [token]
-      );
+      .query("SELECT * FROM users WHERE email = ?", [email]);
 
     if (rows.length === 0) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
-        message: "Invalid or expired token.",
+        message: "User not found with the provided email.",
       });
     }
 
     const user = rows[0];
 
-    // Step 3: Hash password and update DB
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await db
       .promise()
       .query(
-        "UPDATE users SET password = ?, resetToken = NULL, tokenExpires = NULL, updatedAt = NOW() WHERE id = ?",
+        "UPDATE users SET password = ?, resetToken = NULL, updatedAt = NOW() WHERE id = ?",
         [hashedPassword, user.id]
       );
 
-    // Step 4: Success response
     res.status(200).json({
       success: true,
-      message: "Password has been reset successfully.",
+      message: "Password has been updated successfully.",
     });
   } catch (error) {
     console.error("Error resetting password:", error);
@@ -59,6 +55,4 @@ const passwordSet = async (req, res) => {
   }
 };
 
-module.exports = {
-  passwordSet,
-};
+module.exports = { passwordSet };

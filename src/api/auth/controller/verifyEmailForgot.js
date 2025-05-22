@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const { initializeDatabase } = require("../../../database/db");
 const { transporter } = require("../../../lib/transporter");
+const { getOTP } = require("../../../lib/exports");
 
 const verifyEmailForgot = async (req, res) => {
   try {
@@ -24,45 +25,35 @@ const verifyEmailForgot = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "No user found.",
-        user: null,
       });
     }
 
-    const token = crypto.randomBytes(32).toString("hex");
-    const tokenExpires = new Date(Date.now() + 3600000);
-    const resetLink = `https://www.matineeshop.com/reset-password?token=${token}`;
+    const otp = await getOTP();
 
     await db
       .promise()
-      .query("UPDATE users SET resetToken = ?, tokenExpires = ? WHERE id = ?", [
-        token,
-        tokenExpires,
-        user.id,
-      ]);
+      .query("UPDATE users SET otp = ? WHERE id = ?", [otp, user.id]);
 
-    const mailOptions = {
-      from: "farihakausar18@gmail.com",
+    await transporter.sendMail({
+      from: '"Your App Name" <no-reply@yourdomain.com>',
       to: email,
-      subject: "Password Reset Instructions for Matinée",
+      subject: "Your OTP Code for Password Reset",
       html: `
-        <p><strong>Password Reset Instructions</strong></p>
-        <p>Someone has requested a password reset for the following account:</p>
-        <p><strong>Username:</strong> ${user.firstName}</p>
-        <p>If this was a mistake, simply ignore this email and nothing will happen.</p>
-        <p>To reset your password, please click the link below:</p>
-        <p><a href="${resetLink}">Click here to reset your password</a></p>
-        <p>Thank you.</p>
+        <p>Hello,</p>
+        <p>Your OTP for password reset is:</p>
+        <h2>${otp}</h2>
+        <p>Please enter this OTP to proceed. It is valid for a short time.</p>
+        <p>If you did not request this, you can ignore this email.</p>
       `,
-    };
-
-    await transporter.sendMail(mailOptions);
+    });
 
     res.status(200).json({
-      message: "Password reset instructions sent successfully.",
-      token: token,
+      message: "OTP sent to email successfully.",
+      success: true,
     });
   } catch (error) {
     const message = error.message || "We are working to fix this problem";
+    console.error("verifyEmailForgot error:", error);
     res.status(500).json({
       message,
       success: false,
@@ -70,6 +61,4 @@ const verifyEmailForgot = async (req, res) => {
   }
 };
 
-module.exports = {
-  verifyEmailForgot,
-};
+module.exports = { verifyEmailForgot };
