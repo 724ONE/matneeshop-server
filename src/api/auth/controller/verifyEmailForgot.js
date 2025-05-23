@@ -1,6 +1,6 @@
 const crypto = require("crypto");
+const axios = require("axios");
 const { initializeDatabase } = require("../../../database/db");
-const { transporter } = require("../../../lib/transporter");
 const { getOTP } = require("../../../lib/exports");
 
 const verifyEmailForgot = async (req, res) => {
@@ -34,18 +34,23 @@ const verifyEmailForgot = async (req, res) => {
       .promise()
       .query("UPDATE users SET otp = ? WHERE id = ?", [otp, user.id]);
 
-    await transporter.sendMail({
-      from: '"Your App Name" farihakausar18@gmail.com',
-      to: email,
-      subject: "Your OTP Code for Password Reset",
-      html: `
-        <p>Hello,</p>
-        <p>Your OTP for password reset is:</p>
-        <h2>${otp}</h2>
-        <p>Please enter this OTP to proceed. It is valid for a short time.</p>
-        <p>If you did not request this, you can ignore this email.</p>
-      `,
-    });
+    const html = `
+      <p>Hello,</p>
+      <p>Your OTP for password reset is:</p>
+      <h2>${otp}</h2>
+      <p>Please enter this OTP to proceed. It is valid for a short time.</p>
+      <p>If you did not request this, you can ignore this email.</p>
+    `;
+
+    await axios.post(
+      "https://www.matineeshop.com/api/sendmail.php",
+      new URLSearchParams({
+        to: email,
+        subject: "Your OTP Code for Password Reset",
+        html,
+        key: process.env.MAIL_PASS,
+      })
+    );
 
     res.status(200).json({
       message: "OTP sent to email successfully.",
